@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The AI Magic Wand Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2b2354; --ink-soft:#5e567f; --paper:#f6f4fb; --card:#ffffff;
+  --why:#6b5cc4; --what:#2f9e6e; --compound:#3b6fd4; --accent:#e08a2b;
+  --gold:#f5b454; --band:#241d4a; --line:#e7e3f4;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; padding:0; }
+body{ background:#e9e6f3; color:var(--ink); font-family:'Nunito',sans-serif; line-height:1.6; }
+.wrap{ max-width:820px; margin:0 auto; padding:28px 16px 60px; }
+.sheet{
+  background:var(--paper); border-radius:30px;
+  box-shadow:0 30px 80px rgba(40,30,90,.18);
+  position:relative; overflow:hidden;
+}
+.sheet::before{
+  content:""; position:absolute; inset:0;
+  background-image:radial-gradient(circle at 1px 1px, rgba(120,100,200,.06) 1px, transparent 0);
+  background-size:22px 22px; pointer-events:none; z-index:0;
+}
+.pad{ position:relative; z-index:2; padding:38px 44px 44px; }
+
+/* persistent brand eyebrow */
+.brandbar{ text-align:center; padding-top:30px; position:relative; z-index:2; }
+.brandbar span{
+  font-family:'Fredoka',sans-serif; font-weight:600; font-size:13px;
+  letter-spacing:3px; text-transform:uppercase; color:var(--why);
+}
+
+/* fade-in */
+.fade{ opacity:0; transform:translateY(14px); animation:rise .6s ease forwards; }
+@keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+.d1{ animation-delay:.05s; } .d2{ animation-delay:.15s; } .d3{ animation-delay:.25s; } .d4{ animation-delay:.35s; }
+
+/* ---------- INTRO ---------- */
+.intro{ text-align:center; }
+.wand-stage{ position:relative; width:150px; height:130px; margin:6px auto 4px;
+  display:flex; align-items:center; justify-content:center; }
+.wand{ font-size:82px; animation:float 4s ease-in-out infinite;
+  filter:drop-shadow(0 14px 22px rgba(40,30,90,.28)); position:relative; z-index:2; }
+.wand-glow{ position:absolute; width:140px; height:140px; border-radius:50%;
+  background:radial-gradient(circle, rgba(107,92,196,.45) 0%, rgba(107,92,196,.12) 45%, transparent 70%);
+  animation:pulse 4s ease-in-out infinite; z-index:1; }
+.spark{ position:absolute; font-size:22px; z-index:3;
+  filter:drop-shadow(0 0 6px rgba(245,180,84,.8)); }
+.spark.s-a{ top:8px; right:24px; animation:zap 2.4s ease-in-out infinite; }
+.spark.s-b{ bottom:14px; left:22px; animation:zap 2.4s ease-in-out infinite .9s; }
+.spark.s-c{ top:30px; left:30px; font-size:16px; animation:zap 2.4s ease-in-out infinite 1.5s; }
+@keyframes float{ 0%,100%{ transform:translateY(0) rotate(-6deg); } 50%{ transform:translateY(-12px) rotate(6deg); } }
+@keyframes pulse{ 0%,100%{ transform:scale(.92); opacity:.7; } 50%{ transform:scale(1.08); opacity:1; } }
+@keyframes zap{ 0%,100%{ opacity:0; transform:scale(.6); } 45%,65%{ opacity:1; transform:scale(1.1); } }
+
+h1.title{
+  font-family:'Fredoka',sans-serif; font-weight:700; font-size:52px;
+  line-height:1.04; letter-spacing:-1px; color:var(--ink); margin:6px 0 18px;
+}
+.intro .body{ max-width:600px; margin:0 auto; text-align:left; }
+.intro .body p{ font-size:17px; font-weight:600; color:var(--ink-soft); margin:0 0 14px; }
+.intro .body p strong{ color:var(--ink); }
+
+/* rich copy shared (intro + results) */
+.copy p{ font-size:17px; font-weight:600; color:var(--ink-soft); margin:0 0 14px; }
+.copy p strong{ color:var(--ink); }
+.copy em{ font-style:italic; }
+.copy ul{ margin:0 0 16px; padding-left:22px; }
+.copy li{ font-size:16px; font-weight:600; color:var(--ink-soft); margin:0 0 7px; }
+.copy a{ color:var(--why); font-weight:800; text-decoration:none; border-bottom:2px solid #d9d2f3; }
+.copy a:hover{ border-bottom-color:var(--why); }
+.copy h3{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px;
+  letter-spacing:2px; text-transform:uppercase; color:var(--why);
+  margin:26px 0 12px; display:flex; align-items:center; gap:8px; }
+.copy h3::before{ content:"✨"; font-size:16px; }
+.copy .pullquote{
+  background:#efecfb; border-left:4px solid var(--why); border-radius:14px;
+  padding:16px 18px; font-size:17px; font-weight:700; color:var(--ink);
+  margin:0 0 16px;
+}
+
+/* buttons */
+.btn{
+  font-family:'Fredoka',sans-serif; font-weight:600; font-size:18px;
+  background:var(--why); color:#fff; border:none; cursor:pointer;
+  padding:14px 30px; border-radius:40px;
+  box-shadow:0 10px 24px rgba(107,92,196,.32);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.btn:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(107,92,196,.42); }
+.btn.ghost{
+  background:#fff; color:var(--why); border:2px solid var(--line);
+  box-shadow:0 6px 16px rgba(60,45,120,.08); font-size:15px; padding:11px 22px;
+}
+.btn.ghost:hover{ border-color:var(--why); }
+.intro .btn{ margin-top:26px; }
+
+/* ---------- HERO (intro landing, motionsites character video) ---------- */
+/* persistent character banner, stays above the quiz on every screen */
+.hero-vid{
+  position:relative; margin:-38px -44px 0;   /* full-bleed over .pad top + sides */
+  height:54vh; min-height:420px; max-height:500px;
+  overflow:hidden; background:#f0eefa;
+}
+/* Result pages only: a little extra height nudges the revealed character down so the
+   title clears the top of its head. The intro + question hero keeps the original size. */
+.hero-vid.is-result{ height:60vh; min-height:474px; max-height:558px; }
+.hero-media{
+  position:absolute; inset:0; display:block;
+  width:100%; height:100%; object-fit:cover; object-position:center;
+}
+/* short, light top veil, protects the branding without washing out the eyes (removable) */
+.hero-veil{
+  position:absolute; inset:0; pointer-events:none;
+  background:linear-gradient(180deg, rgba(240,238,250,.92) 0%, rgba(240,238,250,.4) 18%, rgba(240,238,250,0) 42%);
+}
+.hero-content{ position:relative; z-index:2; text-align:center; padding:30px 40px 16px; }
+.hero-kicker{
+  font-family:'Fredoka',sans-serif; font-weight:600; font-size:13px;
+  letter-spacing:4px; text-transform:uppercase; color:var(--why);
+  display:inline-block; margin-bottom:6px;
+}
+.hero-content h1{
+  font-family:'Fredoka',sans-serif; font-weight:700; font-size:40px;
+  line-height:1.02; letter-spacing:-1.2px; color:var(--ink); margin:2px 0 0;
+}
+#stage{ padding-top:32px; }
+/* ---- Email gate + inbox confirm ---- */
+.gate{ text-align:center; max-width:560px; margin:0 auto; }
+.gate .gate-emoji{ font-size:46px; line-height:1; margin-bottom:6px; }
+.gate h2.gate-h{ font-family:'Fredoka',sans-serif; font-weight:700; font-size:30px; line-height:1.05; letter-spacing:-.5px; color:var(--ink); margin:6px 0 10px; }
+.gate p{ font-size:17px; font-weight:600; color:var(--ink-soft); margin:0 auto 20px; max-width:500px; }
+.gate .field{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
+.gate input[type=email]{ flex:1 1 240px; min-width:0; font-family:'Nunito',sans-serif; font-size:16px; font-weight:700; color:var(--ink); padding:14px 16px; border:2px solid var(--line); border-radius:14px; outline:none; background:#fff; }
+.gate input[type=email]:focus{ border-color:var(--why); }
+.gate .field .btn{ white-space:nowrap; }
+.gate .fineprint{ font-size:13px; font-weight:600; color:var(--ink-soft); opacity:.85; margin-top:14px; max-width:460px; margin-left:auto; margin-right:auto; }
+.gate .err{ color:#c0392b; font-weight:700; font-size:14px; margin-top:12px; min-height:1em; }
+/* intro copy block below the hero (keeps Simone's full intro) */
+.intro-below{ text-align:center; padding:0 8px 4px; }
+.intro-body{ max-width:600px; margin:0 auto; text-align:left; }
+.hero-btn{
+  font-family:'Fredoka',sans-serif; font-weight:600; font-size:19px;
+  background:var(--why); color:#fff; border:none; cursor:pointer;
+  padding:15px 40px; border-radius:40px; margin-top:22px;
+  box-shadow:0 12px 28px rgba(107,92,196,.4);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.hero-btn:hover{ transform:translateY(-2px); box-shadow:0 16px 34px rgba(107,92,196,.5); }
+
+/* ---------- QUESTIONS ---------- */
+.qmeta{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:14px;
+  letter-spacing:2px; text-transform:uppercase; color:var(--why); margin-bottom:10px; }
+.progress{ height:10px; background:#e7e3f4; border-radius:20px; overflow:hidden; margin-bottom:26px; }
+.progress > i{ display:block; height:100%; border-radius:20px;
+  background:linear-gradient(90deg, var(--why), var(--compound));
+  transition:width .4s ease; }
+h2.qtext{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:32px;
+  line-height:1.12; letter-spacing:-.5px; color:var(--ink); margin:0 0 22px; }
+.examples{
+  border:2px dashed #d9d2f3; border-radius:18px; padding:18px 20px; margin:0 0 24px;
+  background:rgba(255,255,255,.5);
+}
+.examples .lbl{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:12px;
+  letter-spacing:2px; text-transform:uppercase; color:var(--accent); display:block; margin-bottom:8px; }
+.examples ul{ margin:0; padding-left:20px; }
+.examples li{ font-size:15px; font-weight:600; color:var(--ink-soft); margin:0 0 6px; }
+.answer{
+  display:flex; align-items:center; gap:16px; width:100%; text-align:left;
+  background:#fff; border:2px solid var(--line); border-radius:18px;
+  padding:18px 20px; margin:0 0 14px; cursor:pointer; font-family:'Nunito',sans-serif;
+  font-size:16px; font-weight:700; color:var(--ink);
+  box-shadow:0 8px 22px rgba(60,45,120,.06);
+  transition:transform .14s ease, border-color .14s ease, box-shadow .14s ease;
+}
+.answer:hover{ transform:translateY(-2px); border-color:var(--why);
+  box-shadow:0 14px 30px rgba(107,92,196,.18); }
+.answer .badge{
+  flex:0 0 auto; width:40px; height:40px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Fredoka',sans-serif; font-weight:700; font-size:17px; color:#fff;
+  background:linear-gradient(135deg, var(--why), var(--compound));
+}
+.answer:nth-child(2) .badge{ background:linear-gradient(135deg, var(--what), var(--compound)); }
+.back{ margin-top:8px; background:none; border:none; cursor:pointer;
+  font-family:'Fredoka',sans-serif; font-weight:600; font-size:15px; color:var(--ink-soft);
+  padding:8px 4px; }
+.back:hover{ color:var(--why); }
+
+/* ---------- RESULT ---------- */
+.result-eyebrow{
+  font-family:'Fredoka',sans-serif; font-weight:600; font-size:13px;
+  letter-spacing:3px; text-transform:uppercase; color:var(--why);
+  background:#efecfb; display:inline-block; padding:6px 16px; border-radius:30px; margin-bottom:16px;
+}
+.levelbanner{ margin:0 0 8px; }
+.lb-big{ font-family:'Fredoka',sans-serif; font-weight:700; font-size:40px;
+  line-height:1.05; letter-spacing:-1px; color:var(--ink); }
+.lb-top{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:20px;
+  color:var(--what); margin-top:4px; }
+.ladder{ display:flex; gap:8px; margin:18px 0 26px; }
+.ladder i{ flex:1; height:12px; border-radius:20px; background:#e7e3f4; }
+.ladder i.on{ background:linear-gradient(90deg, var(--why), var(--compound)); }
+.resultbody{ margin-top:6px; }
+
+/* funnel hook placeholder (kept invisible until wired) */
+#funnelHook{ display:none; }
+
+/* result footer actions */
+.result-actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:30px;
+  padding-top:24px; border-top:1px solid var(--line); }
+
+/* all-levels view */
+.all-title{ font-family:'Fredoka',sans-serif; font-weight:600; font-size:13px;
+  letter-spacing:3px; text-transform:uppercase; color:var(--why);
+  background:#efecfb; display:inline-block; padding:6px 16px; border-radius:30px; margin-bottom:20px; }
+.all-level{ border:1px solid var(--line); border-radius:22px; background:#fff;
+  padding:26px 26px 22px; margin:0 0 20px; box-shadow:0 10px 30px rgba(60,45,120,.07); }
+.all-level .lb-big{ font-size:28px; margin-bottom:14px; }
+
+@media (max-width:640px){
+  .wrap{ padding:16px 10px 40px; }
+  .pad{ padding:28px 22px 34px; }
+  h2.qtext{ font-size:26px; }
+  .lb-big{ font-size:32px; }
+  .hero-vid{ margin:-28px -22px 0; height:50vh; min-height:340px; max-height:440px; }
+  .hero-vid.is-result{ height:56vh; min-height:386px; max-height:492px; }
+  .hero-content{ padding:24px 22px 14px; }
+  .hero-content h1{ font-size:32px; }
+}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="sheet">
+      <div class="pad">
+        <div id="hero"><!-- persistent character hero --></div>
+        <div id="stage"><!-- quiz screens render here --></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* =====================================================================
+   THE AI MAGIC WAND QUIZ  —  Joyful AI Labs
+   ---------------------------------------------------------------------
+   Copy is Simone's, kept verbatim from the beta. Do not apply Dan's
+   house style (em dashes, colons, British spelling) to it — the quiz
+   copy is a co-author's and stays in her spelling.
+   Presentation rebuilt in the Joyful design language.
+
+   SCORING is a ladder. Each question: if the chosen answer has an entry
+   in stop_on, that entry IS the level and the quiz ends. Otherwise the
+   quiz moves to the next question. (Matches the beta exactly.)
+
+   ==== FUNNEL HOOK POINT (not wired yet, by design) ====
+   The beta has no email capture; neither does this build. When the
+   funnel is wired later:
+     1. Drop a Kit opt-in form into the #funnelHook block below (it is
+        already in the result markup, just display:none).
+     2. Both lead magnets (this quiz + the Field Guide) must feed the
+        SAME nurture sequence.
+     3. If you want level-specific nurture, tag by `level` (0-5) on optin.
+     4. Add the Joyful AI course CTA there too once the sales page URL
+        exists (see project MEMORY: repoint from joyfulai.dannybunny.co).
+   ====================================================== */
+
+const DATA = {
+  "title": "The AI Magic Wand Quiz",
+  "intro_html": `
+<p><strong>What kind of cool stuff can you do with AI?</strong></p>
+<p>AI can help you write an email. But it can also help you turn a weird idea into a little tool, build something interactive from scratch, or make a multi-step process run without you babysitting every part.</p>
+<p>There are five levels to wielding your AI magic wand. This quiz will show you where you are — and the next level of magic you can unlock.</p>
+<p>Take 60 seconds and answer up to 5 questions. You&rsquo;ll get your level + a personalized mini guide for what becomes possible next.</p>
+`,
+  "questions": [
+    {
+      "q": "Are you using AI in your work at all right now?",
+      "examples": [],
+      "answers": [
+        ["A", "Not really. I haven&rsquo;t started using it yet, or I&rsquo;ve only played around with it a tiny bit."],
+        ["B", "Yes. I use it for at least some things in my work."]
+      ],
+      "stop_on": {"A": 0}
+    },
+    {
+      "q": "Have you made or set up anything with AI that you can come back to and use again?",
+      "examples": [
+        "a custom GPT or Claude project",
+        "a little tool, quiz, calculator, planner, or app",
+        "something where AI already knows your information or instructions, so you don&rsquo;t have to start from scratch every time"
+      ],
+      "answers": [
+        ["A", "No. I mostly use AI for one-off things — I ask for help, get an answer, and move on."],
+        ["B", "Yes. I have at least one thing I&rsquo;ve made or set up that I can use again."]
+      ],
+      "stop_on": {"A": 1}
+    },
+    {
+      "q": "When you use AI, do you still have to manually move information in and out of it?",
+      "examples": [
+        "copying information into AI",
+        "uploading files yourself",
+        "taking something AI made and moving it into another tool"
+      ],
+      "answers": [
+        ["A", "Yes. I still do that stuff myself."],
+        ["B", "Not always. I have at least one setup where information moves between AI and another tool without me doing it manually."]
+      ],
+      "stop_on": {"A": 2}
+    },
+    {
+      "q": "Do you have anything where you give AI what it needs at the beginning — and it handles a whole, multi-step job from there?",
+      "examples": [
+        "you give it a client call recording → it creates the notes, next steps, and follow-up",
+        "you give it rough notes → it organizes them, develops them, and turns them into a finished draft",
+        "you give it something to research → it researches it, compares the options using your criteria, and gives you a recommendation"
+      ],
+      "answers": [
+        ["A", "No. AI helps me with individual parts, but I&rsquo;m still guiding it from one step to the next."],
+        ["B", "Yes. I have at least one job where I give AI what it needs at the beginning and it handles the rest."]
+      ],
+      "stop_on": {"A": 3}
+    },
+    {
+      "q": "Does that multi-step job still need YOU to start it?",
+      "examples": [
+        "a new inquiry comes in → the job starts",
+        "a client call ends → the job starts",
+        "a new file appears → the job starts",
+        "Monday morning arrives → the job starts"
+      ],
+      "answers": [
+        ["A", "Yes. AI can handle the job once I start it, but I still have to tell it when to begin."],
+        ["B", "No. I have at least one multi-step job that knows when to start and runs without me initiating it."]
+      ],
+      "stop_on": {"A": 4, "B": 5}
+    }
+  ],
+  "sublines": {
+    "5": "You&rsquo;re at the top level. Congratulations! 🎉"
+  },
+  "results": {
+    "0": {
+      "title": "LEVEL 0 — NOT USING IT",
+      "body_html": `
+<p><strong>You&rsquo;re at the beginning!</strong></p>
+<p>You&rsquo;re not really using AI yet — or maybe you&rsquo;ve poked around a little, asked ChatGPT a few questions, and thought, <em>&ldquo;Okay… that&rsquo;s interesting, I guess…&rdquo;</em></p>
+<p>This is a great place to start.</p>
+<p>You don't have any bad habits you need to un-learn (like:</p>
+<ul>
+<li>copying and pasting whatever AI gives you</li>
+<li>using it to churn out more generic content</li>
+<li>or automating just anything… just because you can 😔).</li>
+</ul>
+<p>You don&rsquo;t have a complicated system to untangle.</p>
+<p>And one of the <em>best</em> things about starting here is that <strong>you get to decide what kind of relationship you want to have with AI</strong> <em>before</em> you absorb everybody else&rsquo;s assumptions about what you&rsquo;re supposed to do with it.</p>
+<p>So much of the world right now is obsessed with efficiency: How much faster can you work? How much can you automate? How much of yourself can you replace?</p>
+<p>Some of that could be useful. But it&rsquo;s not really what we&rsquo;re interested in.</p>
+<p class="pullquote">We&rsquo;re much more interested in what becomes possible when you put this ridiculously powerful technology in the hands of a curious, caring, and creative human being (like you!).</p>
+<p>And ask:</p>
+<ul>
+<li>Okay. What would be FUN to do with this?</li>
+<li>What could really help people?</li>
+<li>What might be possible that I don&rsquo;t even know is possible yet?</li>
+</ul>
+<p>Let&rsquo;s be real. There is an absolutely dizzying amount of AI information flying around. <em>New tools! New models! New features! All the time!</em></p>
+<p>Just in case you could use it: here&rsquo;s our Official Permission Slip to ignore most of it.</p>
+<p>Before you think about learning how to use AI, we&rsquo;d actually like you to ask you a more fun question: <strong>what would you do, create, build – if the old limits didn&rsquo;t apply anymore?</strong></p>
+<h3>YOUR NEXT MOVE</h3>
+<p><strong>Go on a 10-minute possibility-finding expedition.</strong> We made something specifically for this.</p>
+<p>Open our free <a href="https://joyful-ai-field-guide.netlify.app/"><strong>&ldquo;Holy wow, I can build <em>that?</em>&rdquo; Field Guide</strong></a> and spend ten minutes playing around.</p>
+<p>Try the little interactive tools we&rsquo;ve built. Pick a few different kinds of businesses from the menu and see what ideas it comes up with. Click through to some of the real things normal people without fancy coding skills have already made with AI.</p>
+<p>And as you poke around, pay attention to anything that makes your brain go: <strong>&ldquo;Wait. You can make THAT?&rdquo;</strong> Or: <strong>&ldquo;Oohhhh. It would be so fun if I could…&rdquo;</strong></p>
+<p>Your super simple assignment: <strong>find three possibilities that put a sparkle in your eye</strong>. Write them down. Let it set off your imagination. That&rsquo;s it.</p>
+<p>You do not have to do anything about it yet. Right now, we just want to make your world of possibility bigger.</p>
+<p><strong>Go find three things that make you go, &ldquo;Wow, what if…&rdquo; 😃</strong></p>
+`
+    },
+    "1": {
+      "title": "LEVEL 1 — ASKING",
+      "body_html": `
+<p><strong>You and AI? You&rsquo;ve met. You&rsquo;re feeling each other out. You&rsquo;re chatting. ☺️</strong></p>
+<p>You&rsquo;ve started using AI for things here and there.</p>
+<p>Maybe you ask it to:</p>
+<ul>
+<li>brainstorm ideas</li>
+<li>explain something</li>
+<li>research something</li>
+<li>help you think through a problem</li>
+<li>draft an email when your brain is fried</li>
+<li>or take something you wrote and make it shorter</li>
+</ul>
+<p>Basically: you ask, AI answers.</p>
+<p>And this is useful! We love using it for this purpose, too.</p>
+<p>You&rsquo;ve already discovered that having an extremely knowledgeable, infinitely patient little thinking buddy available at all hours can be pretty freaking handy.</p>
+<p>But right now, you&rsquo;re still doing most of the work.</p>
+<p><em>You&rsquo;re</em> the one:</p>
+<ul>
+<li>deciding what needs to happen</li>
+<li>bringing each individual task to AI</li>
+<li>giving it instructions</li>
+<li>looking at what comes back</li>
+<li>correcting it</li>
+<li>asking another question</li>
+<li>and copying and pasting things from one place to another</li>
+</ul>
+<p>In other words – while AI is helping you with individual tasks, <em>it hasn&rsquo;t really changed what you&rsquo;re capable of creating yet.</em></p>
+<p>And this is where things start getting REALLY fun. 😀</p>
+<p class="pullquote">Because AI isn&rsquo;t just something you can talk to. It can help you BUILD stuff.</p>
+<p>Things that solve real problems. Things other people can use that actually adds value to their lives. Like:</p>
+<ul>
+<li>A little calculator that helps someone figure out whether they can afford to quit their job. (In fact, Danny made <a href="https://lito.kit.com/runway-read">exactly that</a>.)</li>
+<li>A virtual oracle card deck. (wait up, Simone made <a href="https://playground.simonegraceseol.com/oracle-deck/">that!</a>)</li>
+<li>A language study tool that quizzes you on exactly what you&rsquo;re learning.</li>
+<li>A small app that solves one extremely specific problem in exactly the way <em>you</em> wish somebody would solve it.</li>
+</ul>
+<p>Things that, until very recently, you might have assumed required a developer, a designer, expensive software, or technical skills you absolutely do NOT possess.</p>
+<p>You actually don&rsquo;t need to go learn a bunch of fancy skills before you&rsquo;re allowed to do this. You can just… mess around and make something that <em>works</em>. Like. Today. (Yes. Really<em>.</em>)</p>
+<h3>YOUR NEXT MOVE</h3>
+<p>Pick one thing and BUILD it! Choose one idea that makes you think: <em>&ldquo;Ooh. I wish this existed.&rdquo;</em> Or: <em>&ldquo;Ooh. wouldn&rsquo;t it be cool if…&rdquo;</em></p>
+<p>Then tell AI: &ldquo;I want to make this. I have no idea how. Help me figure it out.&rdquo;</p>
+<p>Don&rsquo;t worry yet about whether you know the right tool, the right terminology, the right prompt, or the &ldquo;proper&rdquo; way to build it. Start figuring it out together. Let it be messy!</p>
+<p>Because when you do this once, something changes. You start looking at the world around you and seeing possibilities everywhere.</p>
+<p><em>&ldquo;Hey – that tool is pretty cool. Maybe I can make that even better?&rdquo;</em> <em>&ldquo;This works, but only for a certain population. What if I made a version of it for MY people?&rdquo;</em></p>
+<p>Your imagination is about to get a way bigger playground. Have fun in there. 🛝</p>
+`
+    },
+    "2": {
+      "title": "LEVEL 2 — MAKING",
+      "body_html": `
+<p><strong>Ohhhh. You&rsquo;ve discovered that AI can actually MAKE STUFF. 😃</strong></p>
+<p>You&rsquo;ve crossed an important threshold.</p>
+<p>You&rsquo;re not only asking AI questions or getting it to help with bits and pieces of your work. <strong>You&rsquo;ve started making things with it.</strong></p>
+<p>Maybe you&rsquo;ve built a webpage. A quiz. A little tool. A custom GPT or Claude project.</p>
+<p>Maybe you&rsquo;ve made something for your clients or your audience. Maybe you&rsquo;ve just been tinkering and seeing what you can get the damn thing to do.</p>
+<p>Either way: you&rsquo;ve already had some version of the &ldquo;<em>holy wow, I can build that?&rdquo;</em> experience. <em>Woohoo!</em> We celebrate you!</p>
+<p>This is where your relationship with AI starts to expand REALLY quickly, because suddenly you start looking around your life and business differently.</p>
+<ul>
+<li><em>Wait… could this thing talk to THAT thing?</em></li>
+<li><em>Could something happen over here… and trigger something over there?</em></li>
+<li><em>Could AI use all this information I already have without me feeding it in every single time?</em></li>
+</ul>
+<p>And the answer is: <strong>yeah, probably.</strong></p>
+<p>Right now, though, a lot of those things may still live in their own little islands. Like: you give AI the information, you download the thing, you upload it somewhere else. You copy, you paste, you ferry information back and forth.</p>
+<p>Which is fine! You&rsquo;re making things!</p>
+<p class="pullquote">But there&rsquo;s a whole new layer waiting for you: <strong>one thing you made can start talking to</strong> <em><strong>other things in your business.</strong></em> Without you needing to be the go-between, every time.</p>
+<h3>YOUR NEXT MOVE</h3>
+<p><strong>Find one place where you&rsquo;re still manually moving something from here to there — and connect the two.</strong></p>
+<p>First step: look for one place where you regularly think: &ldquo;<em>Okay, now I have to take THIS and put it over THERE.</em>&rdquo; Like:</p>
+<ul>
+<li>Maybe someone fills out a form and you manually move their information somewhere.</li>
+<li>Maybe AI needs information from a document you keep uploading.</li>
+<li>Maybe something gets created in one tool and then you manually put it into another.</li>
+</ul>
+<p>Pick <strong>one</strong> of those handoffs. Then see if you can make the handoff happen without you. Like:</p>
+<ul>
+<li>Someone answers a question — and gets something custom-made, just for them.</li>
+<li>A client call ends — and the next steps are already in motion.</li>
+<li>Someone buys — and an entire customer case experience unfolds without you manually assembling it.</li>
+</ul>
+<p>And once you start getting the hang of this, something REALLY interesting happens: You can actually <em>afford</em> to have more complicated ideas.</p>
+<p>An idea doesn&rsquo;t have to get crossed off because, &ldquo;<em>ugh, but then I&rsquo;d have to take that information and put it here, and then do this for every person, and then remember to send that, and then… never mind.</em>&rdquo;</p>
+<p>All those annoying little moving parts that used to make a cool idea feel like WAY too much work? A lot of them can just… happen.</p>
+<p>Which means you can start creating experiences that are more thoughtful, more personal, more responsive, more generous — without making your own life correspondingly more complicated.</p>
+<p>You can add the little touches that make someone feel <em>seen.</em> You can make things smoother, more useful, more delightful for the people on the other side.</p>
+<p>And you can give yourself permission to make your business weirder, more playful, more elaborate, more FUN — because you&rsquo;re no longer the one personally hauling every tiny piece into place.</p>
+<p>More delight for them. More delight for you. That&rsquo;s where this starts getting really exciting. 😃</p>
+`
+    },
+    "3": {
+      "title": "LEVEL 3 — CONNECTING",
+      "body_html": `
+<p><strong>Look at you – your stuff is talking to your other stuff!</strong></p>
+<p>You&rsquo;ve moved beyond using AI as one isolated little box. You have at least one real connection working. Information can move between places without you personally carrying it across the internet.</p>
+<p>That may not sound earth-shattering… But it changes what becomes possible.</p>
+<p>Because once your tools can share information, you can start thinking beyond: <strong>&ldquo;Can AI do this one thing?&rdquo;</strong> and toward: <strong>&ldquo;Can I hand AI this whole little job?&rdquo;</strong></p>
+<p>Right now, you may still be the project manager. AI does something. You look at it. Then you tell it what to do next. It does that. You check again. Then you give it the next instruction.</p>
+<p>That&rsquo;s great. It means you&rsquo;ve got a very capable assistant… but you&rsquo;re still spending a lot of time managing them.</p>
+<p>To be sure – there are some things where that makes perfect sense. But, there are <em>also</em> some things you&rsquo;ve done enough times that you already KNOW what the standard is, and exactly how to achieve it. Those are the interesting ones.</p>
+<p>Because if you can explain the steps, give AI the context it needs, show it examples, and teach it how to make decisions along the way…<strong>you can start handing over the whole sequence.</strong></p>
+<h3>YOUR NEXT MOVE</h3>
+<p><strong>Turn one repeated process into a job AI knows how to do.</strong></p>
+<p>Pick something you do over and over that has multiple steps.</p>
+<p>I&rsquo;m not talking about your most creative, soulful, deeply-human work. (Please, do not give that to the robot!) I&rsquo;m talking about something technical, procedural… something boring enough that a robot <em>can</em> learn the recipe, and follow it well.</p>
+<p>Teach AI <em>that</em> one. Give it the context. The instructions. The examples. The criteria you use to decide whether something is good.</p>
+<p>Your goal is to get to the point where you can hand it what it needs at the beginning… and come back to something genuinely useful at the end.</p>
+<p class="pullquote">That&rsquo;s the next leap: <strong>from AI helping you with tasks → AI actually taking responsibility for a job.</strong></p>
+<p>And once a whole job can leave your hands, something else gets freed up: your attention.</p>
+<p>You no longer have to keep dropping back into the weeds to check the same steps, make the same little decisions, and shepherd the same process across the finish line.</p>
+<p>The work can still get done well, and your standards can still be inside it – in fact, they must be! The people you serve can still get something thoughtful, useful, and consistent from you. But YOU get to stay with the work that can only be done by you.</p>
+<ul>
+<li>The poem that flows out of you at 10:43 PM.</li>
+<li>The watercolor technique you&rsquo;re working on mastering.</li>
+<li>The novel you&rsquo;re still outlining.</li>
+<li>The coaching clients you give 110% of your undivided attention to.</li>
+</ul>
+<p>And that&rsquo;s when delegation starts to feel a lot less like &ldquo;getting more done, in less time&rdquo;… and a lot more like getting more of yourself back for the parts you actually want to give yourself to.</p>
+<p>Oof. Now <em>that</em>&rsquo;s the kind of freedom we can get behind. 😃</p>
+`
+    },
+    "4": {
+      "title": "LEVEL 4 — DELEGATING",
+      "body_html": `
+<p><strong>Okay. You have actual AI employees now (!)</strong></p>
+<p>You&rsquo;ve reached the point where AI can handle at least one repeatable, multi-step job without you narrating every move.</p>
+<p>You give it what it needs. It knows the sequence + your standards, and you can walk away and come back to something useful. That is a BIG deal.</p>
+<p>And there&rsquo;s one very specific thing still keeping you in the loop: <strong>you have to remember to start it.</strong></p>
+<p>Your AI employee can do the job… but it&rsquo;s still sitting there waiting for you to say &ldquo;GO.&rdquo;</p>
+<p>But notice… a lot of these jobs probably begin after something totally predictable happens. Like:</p>
+<ul>
+<li>Someone buys something.</li>
+<li>A client call ends.</li>
+<li>A new file gets downloaded.</li>
+<li>A new week begins</li>
+</ul>
+<p>Right now, one of those things happens — and then <strong>you</strong> notice, remember what comes next, and press GO.</p>
+<p class="pullquote">But that little moment of <em>you noticing and initiating</em> can often disappear too. <strong>The event itself can start the work.</strong></p>
+<h3>YOUR NEXT MOVE</h3>
+<p><strong>Let one job clock itself in.</strong></p>
+<p>Take one repeatable process AI can already handle well and ask: <em>what always happens right before I start this?</em> That&rsquo;s your potential trigger.</p>
+<p>See if that event can start the process automatically. Start with something low-risk and easy to inspect. Like, say:</p>
+<ul>
+<li>A new inquiry comes in → AI summarizes it and adds it to your client tracker.</li>
+<li>A client call recording appears → AI creates a summary + next steps and saves them in the right place.</li>
+<li>Every Monday morning → AI pulls together the information you need for your weekly report.</li>
+</ul>
+<p>Then let it run.</p>
+<p>And this is where something kind of wonderful starts to happen: <strong>the good intentions in your head can become things your business reliably DOES, on autopilot.</strong></p>
+<p>No more: <em>&ldquo;Oh shit, I meant to follow up with them.&rdquo;</em> No more: <em>&ldquo;I wanted every new enrollee to get a welcome email with their next steps and a little customized note, but I forgot twice this month.&rdquo;</em> No more: <em>&ldquo;I need to remember to do that every Monday.&rdquo;</em></p>
+<p>Which means the people you serve can get more of the thoughtful follow-up, useful support, and tiny surprises. More of the <em>&ldquo;wow, they really thought of everything&rdquo;</em> moments you always wished you had the bandwidth to give them.</p>
+<p><strong>Your brilliant ideas get a better chance of actually happening. Your care gets more reliable.</strong></p>
+<p>And you get the delight of watching things you thoughtfully set in motion… keep showing up + making someone&rsquo;s day a little bit better. We think that&rsquo;s pretty freaking magical. 😃</p>
+`
+    },
+    "5": {
+      "title": "LEVEL 5 — RUNNING",
+      "body_html": `
+<p><strong>Okayyyy. You&rsquo;ve got little robots running around doing jobs while you&rsquo;re off living your life!</strong></p>
+<p>You&rsquo;ve crossed into genuinely sophisticated territory. You have at least one multi-step AI process that can <strong>start, run, and finish without you initiating it.</strong></p>
+<p>Something happens… and your system knows what to do next.</p>
+<p>This is the point where it becomes VERY tempting to look around your business and think: <em>WHAT ELSE CAN I AUTOMATE???</em></p>
+<p>And sure. There are probably more things. But we actually want to point you in a slightly different direction.</p>
+<p>Because once you know how to make AI do a lot of your work, the most important skill is no longer learning how to make it do <em>more</em>.</p>
+<p>It&rsquo;s developing the judgment to know: <strong>what deserves to be automated? what deserves to be made more efficient?</strong> <strong>And what deserves your attention precisely because it IS inefficient, relational, weird, handmade, or human?</strong></p>
+<p>There is a version of the AI future where the ultimate goal is to remove ourselves from everything. Automate the writing, the thinking, the art, the decisions… <em>Make more stuff! Make more money! Faster! With fewer people!</em></p>
+<p>We are NOT interested in that future.</p>
+<p class="pullquote">We&rsquo;re interested in what happens when creative + thoughtful humans (like you!) get back enormous amounts of their time, ability, and creative power… <strong>and then decide on purpose how they want to use them.</strong></p>
+<ul>
+<li>Maybe you want to make more art.</li>
+<li>Maybe you spend Tuesday afternoon floor-wrestling with your kid.</li>
+<li>Maybe you spend way more time actually talking to clients.</li>
+<li>Maybe you make something wildly ambitious that would have required a team of ten people 5 years ago.</li>
+</ul>
+<p>The magic isn&rsquo;t the automation – the magic is someone like you, having more options to direct your life force exactly where you want it. 🥹</p>
+<h3>YOUR NEXT MOVE</h3>
+<p><strong>Stop asking, &ldquo;What else can AI do?&rdquo; for a minute.</strong> Instead, take inventory of what you&rsquo;ve built.</p>
+<ul>
+<li>What&rsquo;s working beautifully?</li>
+<li>What still needs too much babysitting?</li>
+<li>What has become technically efficient… but somehow more impersonal, or sterile, or less alive?</li>
+<li>Where are you tempted to ask AI to make judgments it hasn&rsquo;t earned the right to make yet?</li>
+</ul>
+<p>And most importantly: <strong>where do YOU still want to be?</strong></p>
+<p>When you work through these questions, something else starts to happen.</p>
+<p>Once you&rsquo;re no longer spending so much of your attention keeping everything working as it should, <strong>you start noticing things you didn&rsquo;t have room to notice before.</strong></p>
+<p>Like… Ideas you would have dismissed as too complicated. Experiments you never would have had the bandwidth to try. New ways of serving people. New forms your work could take. New collaborations. New art.</p>
+<p>Things that were never on your to-do list at all — because you were too busy making sure the existing list got done.</p>
+<p>That&rsquo;s the part that really excites us. Not just getting time back, but discovering what opens up once you have it. That changes the horizon of your imagination.</p>
+<p>A new dimension of ideas you can entertain, directions you can explore, and whole versions of your work and life that simply weren&rsquo;t visible from inside the old constraints. And we cannot wait for you to meet the version of yourself who lives in that bigger world — and see what they make possible.</p>
+`
+    }
+  }
+};
+
+/* ---------------- engine ---------------- */
+const stage = document.getElementById('stage');
+const TOTAL = DATA.questions.length;
+let answers = []; // {qi, letter}
+let heroTeardown = null;
+const TAU = Math.PI * 2;
+const wrappedAngle = a => (a % TAU + TAU) % TAU;
+
+// Gaze table for the ORIGINAL lavender clip, from the motionsites prompt:
+// [pupilAngleInRadians, videoTimeInSeconds]. Non-linear on purpose.
+const ORIGINAL_GAZE = [
+  [0.037186,2.54167],[0.130722,2.58333],[0.234912,2.625],[0.321399,2.66667],[0.419378,2.70833],
+  [0.493296,2.75],[0.597784,2.79167],[0.763067,2.83333],[0.778708,2.875],[0.878749,2.91667],
+  [0.993308,2.95833],[1.262791,3.0],[1.388902,3.04167],[1.466609,0.25],[1.473318,0.29167],
+  [1.520011,3.08333],[1.53824,0.33333],[1.6056,0.375],[1.640696,3.125],[1.691747,0.41667],
+  [1.779194,0.45833],[1.869867,0.5],[1.984485,0.54167],[2.07265,0.58333],[2.183915,0.625],
+  [2.267155,0.66667],[2.36138,0.70833],[2.44749,0.75],[2.517676,0.79167],[2.605329,0.83333],
+  [2.670889,0.875],[2.809991,0.91667],[2.918365,0.95833],[3.134177,1.0],[3.240289,1.04167],
+  [3.35949,1.08333],[3.464119,1.125],[3.549317,1.16667],[3.663539,1.20833],[3.78152,1.25],
+  [3.878742,1.29167],[3.989446,1.33333],[4.066996,1.375],[4.225574,1.45833],[4.260255,1.41667],
+  [4.276468,1.5],[4.404025,1.54167],[4.487075,1.58333],[4.552949,1.625],[4.628837,1.66667],
+  [4.701131,1.70833],[4.773675,1.75],[4.833089,1.79167],[4.894145,1.83333],[4.962593,1.875],
+  [5.028737,1.91667],[5.090028,1.95833],[5.212041,2.0],[5.28302,2.04167],[5.349352,2.08333],
+  [5.412121,2.125],[5.473636,2.16667],[5.573871,2.20833],[5.656364,2.25],[5.759153,2.29167],
+  [5.85261,2.33333],[5.938647,2.375],[6.048453,2.41667],[6.153327,2.45833],[6.222603,2.5]
+];
+// Gaze table for the YELLOW BUNNY clip, calibrated here by reading its pupils frame by frame.
+const BUNNY_GAZE = [[1.68771,2.45833],[1.89767,2.5],[1.9789,2.54167],[2.02042,2.58333],[2.06567,2.66667],[2.13214,2.70833],[2.22188,2.79167],[2.27462,2.83333],[2.33181,2.875],[2.38221,2.91667],[2.44287,2.95833],[2.48997,3.04167],[2.53424,3.125],[2.57721,3.20833],[2.63889,3.29167],[2.71215,5.125],[2.7577,5.33333],[2.79918,0.41667],[2.84009,5.91667],[2.88461,0.83333],[2.93283,0.91667],[3.0051,1.0],[3.05362,1.04167],[3.10455,1.08333],[3.14725,3.70833],[3.20659,1.16667],[3.24852,1.20833],[3.28891,3.79167],[3.34668,1.29167],[3.41491,3.875],[3.45878,3.91667],[3.51037,3.95833],[3.5547,1.625],[3.61085,4.08333],[3.65473,1.95833],[3.69863,4.54167],[3.75627,2.25],[3.80169,2.29167],[3.86552,2.33333],[3.9596,2.375],[4.20788,2.41667]];
+
+// A character = a self-hosted eye-tracking clip, the eye midpoint as a fraction of the
+// frame, and its calibrated gaze table. Add a character here and map it to a level below.
+// mode "track" scrubs frames so the pupils follow the cursor (needs a clip whose eyes
+// sweep a full circle). mode "loop" just plays the clip gently (for clips with partial
+// eye motion). Flip a character to "track" once its clip has full-circle eye motion.
+const CHARACTERS = {
+  original:     { src:"assets/hero-original.mp4",   eyeFX:948/1920,  eyeFY:418/1080, aspect:16/9, gaze:ORIGINAL_GAZE, mode:"track" },
+  // Magnific-generated characters reuse the original's gaze table (built off its motion).
+  dog:          { src:"assets/char-dog.mp4",          eyeFX:1009/1920, eyeFY:411/1080, aspect:16/9, gaze:ORIGINAL_GAZE, mode:"track" },
+  bunny:        { src:"assets/char-bunny.mp4",        eyeFX:969/1920,  eyeFY:616/1080, aspect:16/9, gaze:ORIGINAL_GAZE, mode:"track" },
+  blueblob:     { src:"assets/char-blueblob.mp4",     eyeFX:994/1920,  eyeFY:436/1080, aspect:16/9, gaze:ORIGINAL_GAZE, mode:"track" },
+  greenbear:    { src:"assets/char-greenbear.mp4",    eyeFX:1022/1920, eyeFY:443/1080, aspect:16/9, gaze:ORIGINAL_GAZE, mode:"track" },
+  pinkblob:     { src:"assets/char-pinkblob.mp4",     eyeFX:1002/1920, eyeFY:420/1080, aspect:16/9, gaze:ORIGINAL_GAZE, mode:"track" },
+  lavenderblob: { src:"assets/char-lavenderblob.mp4", eyeFX:879/1920,  eyeFY:418/1080, aspect:16/9, gaze:ORIGINAL_GAZE, mode:"track" }
+};
+// Which character each RESULT level reveals. The original persists through the questions.
+const LEVEL_CHARACTER = { 0:"lavenderblob", 1:"bunny", 2:"dog", 3:"greenbear", 4:"pinkblob", 5:"blueblob" };
+
+// ---- Kit opt-in config ----
+// Fill KIT_FORM_UID with the public uid of the "AI Magic Wand Quiz" Kit form once it exists.
+// Until then the gate runs in preview mode (skips the network call so the page is testable).
+const KIT_FORM_UID = 'REPLACE_WITH_FORM_UID';
+let currentLevel = null;
+
+function timeForAngle(angle, gaze){
+  const target = wrappedAngle(angle);
+  let nearestTime = gaze[0][1], nearestDistance = Infinity;
+  for(const [sampleAngle, time] of gaze){
+    const difference = Math.abs(target - sampleAngle);
+    const distance = Math.min(difference, TAU - difference);
+    if(distance < nearestDistance){ nearestDistance = distance; nearestTime = time; }
+  }
+  return nearestTime + 1 / 240;
+}
+
+// One engine drives whichever character is active. setHeroCharacter() swaps the clip.
+let activeChar = null;
+function initHeroGaze(video){
+  let frame = 0, desiredTime = 0, pointer = null, disposed = false;
+  const mobile = window.matchMedia('(max-width: 700px)');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const seek = () => {
+    frame = 0;
+    if(disposed || mobile.matches || video.readyState < 2 || video.seeking) return;
+    if(Math.abs(video.currentTime - desiredTime) > 1 / 48){
+      video.currentTime = Math.min(desiredTime, (video.duration || 7) - 1 / 24);
+    }
+  };
+  const schedule = () => { if(!frame) frame = requestAnimationFrame(seek); };
+  const updateTarget = () => {
+    if(mobile.matches || !pointer || !activeChar || activeChar.mode === 'loop') return;
+    const rect = video.getBoundingClientRect();
+    if(!rect.width) return;
+    // object-fit: cover mapping for a 16:9 clip, resolution-independent
+    const asp = activeChar.aspect;
+    let dispW, dispH;
+    if(rect.width / rect.height < asp){ dispH = rect.height; dispW = rect.height * asp; }
+    else { dispW = rect.width; dispH = rect.width / asp; }
+    const eyeX = rect.left + rect.width / 2 + (activeChar.eyeFX - 0.5) * dispW;
+    const eyeY = rect.top  + rect.height / 2 + (activeChar.eyeFY - 0.5) * dispH;
+    const dx = pointer.x - eyeX, dy = pointer.y - eyeY;
+    if(Math.hypot(dx, dy) > 8){ desiredTime = timeForAngle(Math.atan2(dy, dx), activeChar.gaze); schedule(); }
+  };
+  const move = (e) => { pointer = { x: e.clientX, y: e.clientY }; updateTarget(); };
+  const ready = () => {
+    // "loop" characters (and mobile) just play gently; "track" characters scrub to the cursor.
+    if((activeChar && activeChar.mode === 'loop') || mobile.matches){
+      video.loop = true;
+      if(!reducedMotion.matches) video.play().catch(()=>{});
+      return;
+    }
+    video.loop = false;
+    video.pause();
+    updateTarget();
+    schedule();
+  };
+  video.addEventListener('seeked', schedule);
+  video.addEventListener('loadeddata', ready);
+  mobile.addEventListener('change', ready);
+  reducedMotion.addEventListener('change', ready);
+  window.addEventListener('pointermove', move, { passive: true });
+  window.addEventListener('resize', updateTarget);
+  window.addEventListener('scroll', updateTarget, { passive: true });
+  if(video.readyState >= 2) ready();
+  return () => {
+    disposed = true;
+    cancelAnimationFrame(frame);
+    video.removeEventListener('seeked', schedule);
+    video.removeEventListener('loadeddata', ready);
+    mobile.removeEventListener('change', ready);
+    reducedMotion.removeEventListener('change', ready);
+    window.removeEventListener('pointermove', move);
+    window.removeEventListener('resize', updateTarget);
+    window.removeEventListener('scroll', updateTarget);
+  };
+}
+
+// Swap the hero to a given character (defaults to the original lavender clip).
+let currentCharKey = null;
+function setHeroCharacter(key){
+  const k = CHARACTERS[key] ? key : 'original';
+  // Result pages (any revealed character) get a slightly taller hero for head clearance;
+  // the intro + questions ('original') keep the original size.
+  const box = document.querySelector('.hero-vid');
+  if(box) box.classList.toggle('is-result', k !== 'original');
+  if(k === currentCharKey) return;
+  currentCharKey = k;
+  activeChar = CHARACTERS[k];
+  const video = document.getElementById('heroVideo');
+  if(!video) return;
+  video.pause();
+  video.src = activeChar.src;
+  video.load();
+}
+
+function esc(){ /* copy is trusted authored HTML; inserted as-is */ }
+
+// Make every link in the rendered copy open in a NEW TAB, so a visitor who
+// clicks through (Field Guide, examples, etc.) keeps their quiz result behind them.
+// Done here in JS on purpose, so Simone's copy strings stay verbatim.
+function decorateLinks(){
+  document.querySelectorAll('#stage .copy a').forEach(a=>{
+    a.setAttribute('target','_blank');
+    a.setAttribute('rel','noopener noreferrer');
+  });
+}
+
+// The character hero is mounted once and stays above the quiz on every screen.
+let heroBuilt = false;
+function renderHero(){
+  if(heroBuilt) return;
+  const hero = document.getElementById('hero');
+  hero.innerHTML = `
+    <div class="hero-vid">
+      <video class="hero-media" id="heroVideo" muted playsinline preload="auto"></video>
+      <div class="hero-veil"></div>
+      <div class="hero-content">
+        <span class="hero-kicker">Joyful AI &#10022; 60-second quiz</span>
+        <h1>The AI Magic Wand Quiz</h1>
+      </div>
+    </div>`;
+  heroTeardown = initHeroGaze(document.getElementById('heroVideo'));
+  setHeroCharacter('original');
+  heroBuilt = true;
+}
+
+function renderIntro(){
+  answers = [];
+  setHeroCharacter('original');
+  stage.innerHTML = `
+    <div class="intro-below fade d1">
+      <div class="copy intro-body">${DATA.intro_html}</div>
+      <button class="btn" id="startBtn2">Take the quiz ✦</button>
+    </div>`;
+  document.getElementById('startBtn2').onclick = ()=>renderQuestion(0);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderQuestion(qi){
+  setHeroCharacter('original');
+  const q = DATA.questions[qi];
+  const pct = Math.round(((qi) / TOTAL) * 100) + (Math.round((1/TOTAL)*100)); // fill through current
+  const fill = Math.round(((qi+1) / TOTAL) * 100);
+  const examplesHTML = (q.examples && q.examples.length)
+    ? `<div class="examples"><span class="lbl">For example</span><ul>${q.examples.map(e=>`<li>${e}</li>`).join('')}</ul></div>`
+    : '';
+  const answersHTML = q.answers.map(a=>
+    `<button class="answer" data-letter="${a[0]}"><span class="badge">${a[0]}</span><span>${a[1]}</span></button>`
+  ).join('');
+  const backHTML = `<button class="back">← Back</button>`;
+  stage.innerHTML = `
+    <div class="fade d1">
+      <div class="qmeta">Question ${qi+1}</div>
+      <div class="progress"><i style="width:${fill}%"></i></div>
+      <h2 class="qtext">${q.q}</h2>
+      ${examplesHTML}
+      <div class="answers">${answersHTML}</div>
+      ${backHTML}
+    </div>`;
+  stage.querySelectorAll('.answer').forEach(btn=>{
+    btn.onclick = ()=>choose(qi, btn.dataset.letter);
+  });
+  const back = stage.querySelector('.back');
+  if(back) back.onclick = ()=>{
+    answers.pop();
+    if(qi === 0){ renderIntro(); } else { renderQuestion(qi-1); }
+  };
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function choose(qi, letter){
+  answers[qi] = {qi, letter};
+  const q = DATA.questions[qi];
+  const stop = q.stop_on || {};
+  if(Object.prototype.hasOwnProperty.call(stop, letter)){
+    renderGate(stop[letter]);
+  } else {
+    renderQuestion(qi+1);
+  }
+}
+
+// ---- Email gate (strict flow: capture email BEFORE the result is shown) ----
+function renderGate(level){
+  currentLevel = level;
+  setHeroCharacter('original');            // do not reveal the level character yet
+  stage.innerHTML = `
+    <div class="fade d1 gate">
+      <span class="result-eyebrow">Your result is ready &#10022;</span>
+      <h2 class="gate-h">Where should we send it?</h2>
+      <p>Pop your email in and your AI Magic Wand result lands in your inbox, with the full breakdown of where you are now and the one move to make next.</p>
+      <form id="gateForm" novalidate>
+        <div class="field">
+          <input type="email" id="gateEmail" placeholder="you@email.com" autocomplete="email" required>
+          <button class="btn" type="submit" id="gateBtn">Send my result &#10022;</button>
+        </div>
+        <div class="err" id="gateErr"></div>
+        <div class="fineprint">One email with your result. Simone and Dan may send a few more good things after. Unsubscribe anytime.</div>
+      </form>
+    </div>`;
+  document.getElementById('gateForm').onsubmit = (e)=>{ e.preventDefault(); handleGateSubmit(level); };
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+async function handleGateSubmit(level){
+  const emailEl = document.getElementById('gateEmail');
+  const errEl = document.getElementById('gateErr');
+  const btn = document.getElementById('gateBtn');
+  const email = (emailEl.value||'').trim();
+  errEl.textContent = '';
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ errEl.textContent = 'Please enter a valid email address.'; return; }
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try{
+    await subscribeToKit(level, email);
+    renderInboxConfirm(email);
+  }catch(err){
+    btn.disabled = false; btn.innerHTML = 'Send my result &#10022;';
+    errEl.textContent = 'Hmm, that did not go through. Please try again in a moment.';
+  }
+}
+
+async function subscribeToKit(level, email){
+  // Preview mode until the real Kit form uid is set, so the page is testable before wiring.
+  if(!KIT_FORM_UID || KIT_FORM_UID === 'REPLACE_WITH_FORM_UID'){
+    console.log('[quiz] preview mode — would subscribe', {email, level});
+    return {status:'preview'};
+  }
+  const body = new URLSearchParams();
+  body.set('email_address', email);
+  body.set('fields[quiz_level]', String(level));
+  body.set('fields[quiz_level_name]', (DATA.results[String(level)]||{}).title || '');
+  const res = await fetch(`https://app.kit.com/forms/${KIT_FORM_UID}/subscriptions`, {
+    method:'POST', headers:{'Accept':'application/json'}, body
+  });
+  if(!res.ok) throw new Error('kit '+res.status);
+  return res.json().catch(()=>({}));
+}
+
+function renderInboxConfirm(email){
+  setHeroCharacter('original');
+  const safe = email.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  stage.innerHTML = `
+    <div class="fade d1 gate">
+      <div class="gate-emoji">&#128236;</div>
+      <span class="result-eyebrow">Check your inbox &#10022;</span>
+      <h2 class="gate-h">Your result is on its way</h2>
+      <p>We have sent your AI Magic Wand result to <strong>${safe}</strong>. Open it to see your level and your full breakdown.</p>
+      <div class="fineprint">Give it a minute. If it is hiding, check your spam or promotions tab, and add Dan to your contacts so the rest arrive too.</div>
+    </div>`;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function ladderHTML(level){
+  let s = '<div class="ladder">';
+  for(let i=1;i<=5;i++){ s += `<i class="${i<=level?'on':''}"></i>`; }
+  s += '</div>';
+  return s;
+}
+
+// Self-contained confetti burst (no library) for the results reveal. Honours reduced-motion.
+function fireConfetti(){
+  try{ if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; }catch(e){}
+  const colors = ['#6b5cc4','#2f9e6e','#3b6fd4','#e08a2b','#f5b454','#c9a7f0','#8fd6b4'];
+  const cv = document.createElement('canvas');
+  cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:9999';
+  document.body.appendChild(cv);
+  const ctx = cv.getContext('2d');
+  const dpr = Math.min(window.devicePixelRatio||1, 2);
+  const W = ()=>window.innerWidth, H = ()=>window.innerHeight;
+  function size(){ cv.width=W()*dpr; cv.height=H()*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  size();
+  const N = W()<640 ? 90 : 150, parts = [];
+  for(let i=0;i<N;i++){
+    const left = i%2===0;
+    parts.push({
+      x: left ? W()*0.14 : W()*0.86,
+      y: H()*0.30,
+      vx: (left?1:-1)*(2+Math.random()*6) + (Math.random()-0.5)*3,
+      vy: -(6+Math.random()*8),
+      g: 0.22+Math.random()*0.12,
+      s: 6+Math.random()*7,
+      rot: Math.random()*Math.PI*2,
+      vr: (Math.random()-0.5)*0.4,
+      color: colors[(Math.random()*colors.length)|0],
+      shape: Math.random()<0.5?'rect':'circ'
+    });
+  }
+  const DUR = 2600; let start=null, raf;
+  function frame(t){
+    if(!start) start=t;
+    const el = t-start;
+    ctx.clearRect(0,0,W(),H());
+    let alive=0;
+    for(const p of parts){
+      p.vy+=p.g; p.x+=p.vx; p.y+=p.vy; p.vx*=0.995; p.rot+=p.vr;
+      const fade = el>DUR-700 ? Math.max(0,(DUR-el)/700) : 1;
+      if(p.y < H()+40 && fade>0) alive++;
+      ctx.save(); ctx.globalAlpha=fade; ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.fillStyle=p.color;
+      if(p.shape==='rect') ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.62);
+      else { ctx.beginPath(); ctx.arc(0,0,p.s/2,0,Math.PI*2); ctx.fill(); }
+      ctx.restore();
+    }
+    if(el<DUR && alive>0) raf=requestAnimationFrame(frame);
+    else { cancelAnimationFrame(raf); cv.remove(); }
+  }
+  raf = requestAnimationFrame(frame);
+  setTimeout(()=>{ if(cv.parentNode) cv.remove(); }, DUR+600);
+}
+
+function renderResult(level){
+  setHeroCharacter(LEVEL_CHARACTER[level] || 'original');
+  const r = DATA.results[String(level)];
+  const sub = DATA.sublines[String(level)];
+  const subHTML = sub ? `<div class="lb-top">${sub}</div>` : '';
+  stage.innerHTML = `
+    <div class="fade d1">
+      <span class="result-eyebrow">${r.title}</span>
+      <div class="levelbanner">
+        <div class="lb-big">You are Level ${level} of 5</div>
+        ${subHTML}
+      </div>
+      ${ladderHTML(level)}
+      <div class="copy resultbody">${r.body_html}</div>
+
+      <!-- ===== FUNNEL HOOK POINT (wire later) =====
+           Email capture / course CTA goes here. Kept hidden until wired.
+           Both lead magnets feed the SAME nurture sequence. Tag by level "${level}" if wanted. -->
+      <div id="funnelHook" data-level="${level}"></div>
+
+      <div class="result-actions">
+        <button class="btn ghost" id="retakeBtn">Retake quiz</button>
+        <button class="btn ghost" id="allBtn">See all levels</button>
+      </div>
+    </div>`;
+  document.getElementById('retakeBtn').onclick = renderIntro;
+  document.getElementById('allBtn').onclick = renderAllLevels;
+  decorateLinks();
+  window.scrollTo({top:0, behavior:'smooth'});
+  fireConfetti();
+}
+
+function renderAllLevels(){
+  const blocks = Object.keys(DATA.results).map(k=>{
+    const r = DATA.results[k];
+    const sub = DATA.sublines[k];
+    const subHTML = sub ? `<div class="lb-top">${sub}</div>` : '';
+    return `<div class="all-level">
+      <span class="result-eyebrow">${r.title}</span>
+      <div class="levelbanner"><div class="lb-big">You are Level ${k} of 5</div>${subHTML}</div>
+      ${ladderHTML(Number(k))}
+      <div class="copy">${r.body_html}</div>
+    </div>`;
+  }).join('');
+  stage.innerHTML = `
+    <div class="fade d1">
+      <span class="all-title">All levels</span>
+      ${blocks}
+      <div class="result-actions">
+        <button class="btn ghost" id="retakeBtn2">Retake quiz</button>
+      </div>
+    </div>`;
+  document.getElementById('retakeBtn2').onclick = renderIntro;
+  decorateLinks();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+renderHero();
+// Routing: the email's "See my full result" button links to ...?level=N and opens
+// the full result view directly. No level param means the normal quiz start.
+(function route(){
+  let lvl = null;
+  try{
+    const v = new URLSearchParams(location.search).get('level');
+    if(v !== null && /^[0-5]$/.test(v)) lvl = Number(v);
+  }catch(e){}
+  if(lvl !== null){ renderResult(lvl); } else { renderIntro(); }
+})();
+</script>
+</body>
+</html>
