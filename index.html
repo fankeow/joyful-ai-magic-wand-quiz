@@ -627,9 +627,9 @@ const CHARACTERS = {
 const LEVEL_CHARACTER = { 0:"lavenderblob", 1:"bunny", 2:"dog", 3:"greenbear", 4:"pinkblob", 5:"blueblob" };
 
 // ---- Kit opt-in config ----
-// Fill KIT_FORM_UID with the public uid of the "AI Magic Wand Quiz" Kit form once it exists.
-// Until then the gate runs in preview mode (skips the network call so the page is testable).
-const KIT_FORM_UID = 'REPLACE_WITH_FORM_UID';
+// Kit form "AI Magic Wand Quiz" (uid ddaf368f3f). The subscribe endpoint uses the numeric id.
+// Set to '' to drop back into preview mode (skips the network call so the page is testable).
+const KIT_FORM_UID = '9896212';
 let currentLevel = null;
 
 function timeForAngle(angle, gaze){
