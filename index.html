@@ -849,20 +849,20 @@ async function handleGateSubmit(level){
 }
 
 async function subscribeToKit(level, email){
-  // Preview mode until the real Kit form uid is set, so the page is testable before wiring.
+  // Preview mode until the Kit form is wired, so the page is testable before deploy.
   if(!KIT_FORM_UID || KIT_FORM_UID === 'REPLACE_WITH_FORM_UID'){
     console.log('[quiz] preview mode — would subscribe', {email, level});
     return {status:'preview'};
   }
-  const body = new URLSearchParams();
-  body.set('email_address', email);
-  body.set('fields[quiz_level]', String(level));
-  body.set('fields[quiz_level_name]', (DATA.results[String(level)]||{}).title || '');
-  const res = await fetch(`https://app.kit.com/forms/${KIT_FORM_UID}/subscriptions`, {
-    method:'POST', headers:{'Accept':'application/json'}, body
+  // Post to our own Netlify function, which talks to Kit server-side (no browser CORS block).
+  const res = await fetch('/.netlify/functions/subscribe', {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ email, level:String(level), level_name:(DATA.results[String(level)]||{}).title || '' })
   });
-  if(!res.ok) throw new Error('kit '+res.status);
-  return res.json().catch(()=>({}));
+  if(!res.ok) throw new Error('subscribe '+res.status);
+  const j = await res.json().catch(()=>({}));
+  if(j && j.ok === false) throw new Error('kit not ok');
+  return j;
 }
 
 function renderInboxConfirm(email){
